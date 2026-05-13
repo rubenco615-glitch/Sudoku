@@ -23,17 +23,3 @@ Detailed documentation can be found in the [docs/](docs/) folder:
 - [Architecture & MVC](docs/ARCHITECTURE.md)
 
 ## Development
-
-This project follows **GitFlow**.
-
-### Commits Example (Standard)
-- `feat: add sudoku board model`
-- `feat: implement swing interface`
-- `fix: prevent editing fixed cells`
-
-## Build & Run
-
-```bash
-mvn clean compile
-mvn exec:java -Dexec.mainClass="com.sudoku.Main"
-```
