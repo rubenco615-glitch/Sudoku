@@ -50,6 +50,19 @@ classDiagram
     Sudoku *-- Cell : contains
 ```
 
+## State Diagram (Application States)
+
+```mermaid
+stateDiagram-v2
+    [*] --> WelcomeScreen
+    WelcomeScreen --> Playing : Click Jugar
+    Playing --> Validating : Input Number
+    Validating --> Playing : Move Valid/Invalid
+    Playing --> Solved : Solution Verified
+    Solved --> WelcomeScreen : Reset/New Game
+    Playing --> Menu : Exit
+```
+
 ## Flow Diagram (MVC)
 
 ```mermaid
