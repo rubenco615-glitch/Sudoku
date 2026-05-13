@@ -65,17 +65,20 @@ public class SudokuGUI extends JFrame {
         
         // Grid Panel
         JPanel gridPanel = new JPanel(new GridLayout(9, 9));
+        gridPanel.setBackground(Constants.BACKGROUND_COLOR);
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 fields[i][j] = new JTextField(2);
                 fields[i][j].setHorizontalAlignment(JTextField.CENTER);
                 fields[i][j].setFont(new Font("SansSerif", Font.BOLD, 18));
+                fields[i][j].setForeground(Constants.TEXT_COLOR);
+                fields[i][j].setCaretColor(Constants.TEXT_COLOR);
                 
                 int top = (i % 3 == 0) ? 2 : 1;
                 int left = (j % 3 == 0) ? 2 : 1;
                 int bottom = (i == 8) ? 2 : 1;
                 int right = (j == 8) ? 2 : 1;
-                fields[i][j].setBorder(new MatteBorder(top, left, bottom, right, Color.BLACK));
+                fields[i][j].setBorder(new MatteBorder(top, left, bottom, right, Color.GRAY));
                 
                 gridPanel.add(fields[i][j]);
             }
@@ -84,6 +87,7 @@ public class SudokuGUI extends JFrame {
 
         // Control Panel
         JPanel controlPanel = new JPanel();
+        controlPanel.setBackground(Constants.PANEL_COLOR);
         difficultyCombo = new JComboBox<>(new String[]{"Easy", "Medium", "Hard"});
         newGameBtn = new JButton("New Game");
         resetBtn = new JButton("Reset");
@@ -107,6 +111,7 @@ public class SudokuGUI extends JFrame {
                 fields[i][j].setText(val == 0 ? "" : String.valueOf(val));
                 fields[i][j].setEditable(!board[i][j].isFixed());
                 fields[i][j].setBackground(board[i][j].isFixed() ? Constants.FIXED_CELL_COLOR : Constants.EDITABLE_CELL_COLOR);
+                fields[i][j].setForeground(Constants.TEXT_COLOR);
             }
         }
     }
