@@ -83,11 +83,11 @@ public class SudokuGUI extends JFrame {
                 fields[i][j].setForeground(Constants.TEXT_COLOR);
                 fields[i][j].setCaretColor(Constants.TEXT_COLOR);
                 
-                int top = (i % 3 == 0) ? 2 : 1;
-                int left = (j % 3 == 0) ? 2 : 1;
-                int bottom = (i == 8) ? 2 : 1;
-                int right = (j == 8) ? 2 : 1;
-                fields[i][j].setBorder(new MatteBorder(top, left, bottom, right, Color.GRAY));
+                int top = (i % 3 == 0) ? 3 : 1;
+                int left = (j % 3 == 0) ? 3 : 1;
+                int bottom = (i == 8) ? 3 : 1;
+                int right = (j == 8) ? 3 : 1;
+                fields[i][j].setBorder(new MatteBorder(top, left, bottom, right, Color.BLACK));
                 
                 gridPanel.add(fields[i][j]);
             }
@@ -120,9 +120,35 @@ public class SudokuGUI extends JFrame {
                 fields[i][j].setText(val == 0 ? "" : String.valueOf(val));
                 fields[i][j].setEditable(!board[i][j].isFixed());
                 fields[i][j].setBackground(board[i][j].isFixed() ? Constants.FIXED_CELL_COLOR : Constants.EDITABLE_CELL_COLOR);
-                fields[i][j].setForeground(Constants.TEXT_COLOR);
+                fields[i][j].setForeground(board[i][j].isFixed() ? Constants.FIXED_TEXT_COLOR : Constants.TEXT_COLOR);
+                
+                // Limpiar cualquier resaltado previo
+                fields[i][j].setBorder(new MatteBorder(
+                    (i % 3 == 0) ? 3 : 1, (j % 3 == 0) ? 3 : 1,
+                    (i == 8) ? 3 : 1, (j == 8) ? 3 : 1, Color.BLACK));
             }
         }
+    }
+
+    public void addSelectionHighlight(int row, int col) {
+        String target = fields[row][col].getText();
+        if (target.isEmpty()) return;
+        
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                if (fields[i][j].getText().equals(target)) {
+                    fields[i][j].setBorder(BorderFactory.createLineBorder(new Color(97, 218, 251), 2));
+                } else {
+                    fields[i][j].setBorder(new MatteBorder(
+                        (i % 3 == 0) ? 3 : 1, (j % 3 == 0) ? 3 : 1,
+                        (i == 8) ? 3 : 1, (j == 8) ? 3 : 1, Color.BLACK));
+                }
+            }
+        }
+    }
+
+    public void updateCell(int row, int col, String text) {
+        fields[row][col].setText(text);
     }
 
     public void addListeners(ActionListener newGame, ActionListener reset, ActionListener check, ActionListener solve) {
@@ -134,6 +160,10 @@ public class SudokuGUI extends JFrame {
 
     public void addCellListener(int row, int col, KeyListener kl) {
         fields[row][col].addKeyListener(kl);
+    }
+
+    public void addCellFocusListener(int row, int col, java.awt.event.FocusListener fl) {
+        fields[row][col].addFocusListener(fl);
     }
 
     public String getDifficulty() { return (String) difficultyCombo.getSelectedItem(); }

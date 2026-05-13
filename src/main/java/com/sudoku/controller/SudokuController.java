@@ -48,24 +48,53 @@ public class SudokuController {
                     public void keyReleased(KeyEvent e) {
                         String text = view.getCellValue(r, c);
                         int val = 0;
-                        if (text.matches("[1-9]")) {
-                            val = Integer.parseInt(text);
-                        }
-                        
-                        // Always update model so Check button works
-                        model.placeNumber(r, c, val);
-                        
-                        if (val > 0) {
-                            if (model.isMoveValid(r, c, val)) {
-                                view.setCellColor(r, c, Constants.SUCCESS_COLOR);
+
+                        if (!text.isEmpty()) {
+                            String lastChar = text.substring(text.length() - 1);
+                            if (lastChar.matches("[1-9]")) {
+                                val = Integer.parseInt(lastChar);
+                                view.updateCell(r, c, lastChar);
                             } else {
-                                view.setCellColor(r, c, Constants.ERROR_COLOR);
+                                view.updateCell(r, c, "");
                             }
-                        } else {
-                            view.setCellColor(r, c, Constants.EDITABLE_CELL_COLOR);
                         }
+
+                        model.placeNumber(r, c, val);
+                        validateAllCells(); // Re-validar todo el tablero al instante
                     }
                 });
+
+                // Resaltar números iguales al hacer clic (Corregido)
+                view.addCellFocusListener(r, c, new java.awt.event.FocusAdapter() {
+                    @Override
+                    public void focusGained(java.awt.event.FocusEvent e) {
+                        view.addSelectionHighlight(r, c);
+                    }
+                });
+            }
+        }
+    }
+
+    private void validateAllCells() {
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                int val = model.getBoard()[i][j].getValue();
+                boolean isFixed = model.getBoard()[i][j].isFixed();
+                
+                if (val == 0) {
+                    view.setCellColor(i, j, Constants.EDITABLE_CELL_COLOR);
+                } else {
+                    if (model.isMoveValid(i, j, val)) {
+                        view.setCellColor(i, j, isFixed ? Constants.FIXED_CELL_COLOR : Constants.SUCCESS_COLOR);
+                    } else {
+                        // Si es fijo, no lo ponemos en rojo (es la "verdad"), pero sí al usuario que choca
+                        if (isFixed) {
+                            view.setCellColor(i, j, Constants.FIXED_CELL_COLOR);
+                        } else {
+                            view.setCellColor(i, j, Constants.ERROR_COLOR);
+                        }
+                    }
+                }
             }
         }
     }
@@ -91,6 +120,8 @@ public class SudokuController {
                 }
             }
             view.updateBoard(model.getBoard());
+        } else {
+            view.showMessage("No solution exists for the current board! Check for mistakes or reset.");
         }
     }
 }
