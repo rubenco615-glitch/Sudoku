@@ -1,9 +1,25 @@
 # Sudoku Game - MVC Java Project
 
+![Build Status](https://github.com/USER_NAME/REPO_NAME/actions/workflows/ci.yml/badge.svg)
+![Coverage](https://img.shields.io/badge/Coverage-Check_Artifact-green)
+![Documentation](https://img.shields.io/badge/Docs-GitHub_Pages-blue)
+
 Professional Sudoku application built with Java Swing and MVC architecture.
 
 ## Project Overview
-This project is a complete Sudoku implementation designed for academic excellence, following best practices in software engineering.
+This project is a complete Sudoku implementation designed for academic excellence, following best practices in software engineering and evaluated under the "Entornos de Desarrollo" criteria.
+
+## Project Structure
+```text
+Sudoku/
+├── .github/workflows/    # CI/CD (GitHub Actions)
+├── docs/                 # Documentation (UML, Guides)
+├── src/
+│   ├── main/java/        # MVC Source Code
+│   └── test/java/        # Unit Tests (JUnit 5)
+├── pom.xml               # Maven Configuration
+└── LICENSE               # MIT License
+```
 
 ## Architecture: Model-View-Controller (MVC)
 The project is strictly organized into three layers:

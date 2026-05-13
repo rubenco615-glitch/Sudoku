@@ -12,10 +12,19 @@ import java.awt.event.KeyListener;
  * Main GUI for the Sudoku game.
  */
 public class SudokuGUI extends JFrame {
+    /** Text fields representing the 9x9 grid cells. */
     private final JTextField[][] fields = new JTextField[9][9];
+    
+    /** Control buttons for game actions. */
     private JButton newGameBtn, resetBtn, checkBtn, solveBtn, playBtn;
+    
+    /** Dropdown for selecting game difficulty. */
     private JComboBox<String> difficultyCombo;
+    
+    /** Main container panel using CardLayout to switch screens. */
     private JPanel mainContainer;
+    
+    /** Layout manager for switching between Welcome and Game panels. */
     private CardLayout cardLayout;
 
     public SudokuGUI() {

@@ -1,6 +1,12 @@
-# Architecture and Design
+This document explains the technical architecture and the evolutionary design process of the Sudoku project.
 
-This document explains the technical architecture of the Sudoku project.
+## Design Evolution
+
+The project evolved through several architectural stages:
+1.  **Skeleton Phase**: Definition of empty classes to establish the MVC structure without business logic.
+2.  **Logic Phase**: Transition from simple primitive arrays (`int[][]`) to a more robust `Cell` object model to handle state (fixed vs. editable).
+3.  **UI Evolution**: Implementation of a single-frame GUI that eventually adopted `CardLayout` to support a professional Welcome Screen and decoupled game panels.
+4.  **Service Integration**: Moving complex algorithms (Backtracking) out of the Model and into dedicated `Service` classes to follow the Single Responsibility Principle.
 
 ## MVC Pattern
 

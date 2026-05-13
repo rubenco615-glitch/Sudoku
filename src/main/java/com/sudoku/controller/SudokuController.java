@@ -21,10 +21,22 @@ public class SudokuController {
 
     private void initController() {
         view.addListeners(
-            e -> { model.generateBoard(view.getDifficulty()); view.updateBoard(model.getBoard()); },
-            e -> { model.resetBoard(); view.updateBoard(model.getBoard()); },
-            e -> { if (model.isSolved()) view.showMessage("Sudoku Solved!"); else view.showMessage("Not solved yet!"); },
-            e -> { /* Solve logic implemented in service, used via model in a real app */ }
+            e -> { 
+                model.generateBoard(view.getDifficulty()); 
+                view.updateBoard(model.getBoard()); 
+            },
+            e -> { 
+                model.resetBoard(); 
+                view.updateBoard(model.getBoard()); 
+            },
+            e -> { 
+                if (model.isSolved()) {
+                    view.showMessage("Congratulations! Sudoku Solved!");
+                } else {
+                    view.showMessage("Not solved yet or contains errors. Keep trying!");
+                }
+            },
+            e -> handleSolve()
         );
 
         for (int i = 0; i < 9; i++) {
@@ -35,21 +47,50 @@ public class SudokuController {
                     @Override
                     public void keyReleased(KeyEvent e) {
                         String text = view.getCellValue(r, c);
+                        int val = 0;
                         if (text.matches("[1-9]")) {
-                            int val = Integer.parseInt(text);
+                            val = Integer.parseInt(text);
+                        }
+                        
+                        // Always update model so Check button works
+                        model.placeNumber(r, c, val);
+                        
+                        if (val > 0) {
                             if (model.isMoveValid(r, c, val)) {
-                                model.placeNumber(r, c, val);
                                 view.setCellColor(r, c, Constants.SUCCESS_COLOR);
                             } else {
                                 view.setCellColor(r, c, Constants.ERROR_COLOR);
                             }
-                        } else if (text.isEmpty()) {
-                            model.placeNumber(r, c, 0);
+                        } else {
                             view.setCellColor(r, c, Constants.EDITABLE_CELL_COLOR);
                         }
                     }
                 });
             }
+        }
+    }
+
+    private void handleSolve() {
+        // Reset non-fixed cells to ensure a clean start for the solver
+        model.resetBoard();
+        
+        com.sudoku.service.SudokuSolver solver = new com.sudoku.service.SudokuSolver();
+        int[][] boardArray = new int[9][9];
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                boardArray[i][j] = model.getBoard()[i][j].getValue();
+            }
+        }
+        
+        if (solver.solve(boardArray)) {
+            for (int i = 0; i < 9; i++) {
+                for (int j = 0; j < 9; j++) {
+                    if (!model.getBoard()[i][j].isFixed()) {
+                        model.getBoard()[i][j].setValue(boardArray[i][j]);
+                    }
+                }
+            }
+            view.updateBoard(model.getBoard());
         }
     }
 }
