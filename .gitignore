@@ -1,0 +1,26 @@
+# Compilados y empaquetados
+target/
+*.class
+*.jar
+*.war
+*.ear
+
+# Logs
+*.log
+
+# Archivos de IDE (IntelliJ, Eclipse, VS Code)
+.idea/
+*.iml
+.project
+.classpath
+.settings/
+.vscode/
+.factorypath
+
+# Archivos del Sistema Operativo
+Thumbs.db
+.DS_Store
+
+# Reportes de Testing y Cobertura
+target/site/jacoco/
+target/site/apidocs/
